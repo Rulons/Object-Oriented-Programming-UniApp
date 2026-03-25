@@ -35,7 +35,7 @@ The program provides a GUI for entering, storing, and navigating student data, a
 2. Ensure JDK 17 is installed and detected by VS Code.
 3. Compile and run `KlainsUniApp.java`:
    - Right-click `KlainsUniApp.java` → **Run Java**
-   - Or click the ▶️ run button in VS Code
+   - Or click the run button in VS Code
 4. Use the GUI to:
    - Enter student information
    - Click **Enter Student Details** to add to the store
