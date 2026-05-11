@@ -14,16 +14,8 @@ public class Student extends Person {
     private boolean disabled;
     private String assignedHall;
 
-    /**
-     * The Constructor
-     *
-     * @param givenName - Given name of the student
-     * @param surname - Surname of the student
-     * @param dob - Date of birth of the student
-     * @param studentId - Student ID of the student
-     * @param courseName - Course the student is studying
-     * @param startDate - Start date of the course
-     */
+    private boolean paid;
+
     public Student(String givenName, String surname, String dob,
             String studentId, String courseName, String startDate) {
 
@@ -36,86 +28,53 @@ public class Student extends Person {
         this.diet = "standard";
         this.disabled = false;
         this.assignedHall = "Unassigned";
+        this.paid = false;
     }
 
-    // Getters
-    /**
-     *
-     * @return - Returns a student ID
-     */
     public String getStudentId() {
         return studentId;
     }
 
-    /**
-     *
-     * @return - Returns the course name
-     */
     public String getCourseName() {
         return courseName;
     }
 
-    /**
-     *
-     * @return - Returns the start date
-     */
     public String getStartDate() {
         return startDate;
     }
 
-    /**
-     *
-     * @return - Returns 'standard', 'vegetarian' or 'vegan'
-     */
     public String getDiet() {
         return diet;
     }
 
-    /**
-     *
-     * @return - Returns boolean representing disability 
-     */
     public boolean isDisabled() {
         return disabled;
     }
 
-    /**
-     *
-     * @return - Returns whether ground floor access is needed
-     */
     public String getAssignedHall() {
         return assignedHall;
     }
 
-    // Setters
-    /**
-     *
-     * @param diet - to set diet to 'standard', 'vegetarian' or 'vegan'
-     */
+    public boolean isPaid() {
+        return paid;
+    }
+
     public void setDiet(String diet) {
         this.diet = diet;
     }
 
-    /**
-     *
-     * @param disabled - sets boolean  representing disability 
-     */
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
 
-    /**
-     *
-     * @param assignedHall- Sets whether ground floor access is needed
-     */
     public void setAssignedHall(String assignedHall) {
         this.assignedHall = assignedHall;
     }
 
-    /**
-     * Override of built in toString method
-     * @return - a string represemting the main attributes of a student in a clear accessible format
-     */
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
     @Override
     public String toString() {
         return "Student Details:\n"
@@ -126,6 +85,7 @@ public class Student extends Person {
                 + "Start Date: " + startDate + "\n"
                 + "Diet: " + diet + "\n"
                 + "Disabled: " + disabled + "\n"
-                + "Hall: " + assignedHall;
+                + "Hall: " + assignedHall + "\n"
+                + "Paid: " + paid;
     }
 }
