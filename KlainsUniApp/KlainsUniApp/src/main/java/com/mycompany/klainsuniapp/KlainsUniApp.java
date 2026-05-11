@@ -3,6 +3,10 @@ package com.mycompany.klainsuniapp;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javax.swing.*;
 
 public class KlainsUniApp {
@@ -19,6 +23,7 @@ public class KlainsUniApp {
         displayStudents.setLineWrap(true);
         displayStudents.setWrapStyleWord(true);
         displayStudents.setEditable(false);
+
         JScrollPane scrollPane = new JScrollPane(displayStudents);
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
@@ -28,6 +33,7 @@ public class KlainsUniApp {
 
         JLabel titleLabel = new JLabel("Enter Student Details");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         topPanel.add(titleLabel);
         topPanel.add(Box.createVerticalStrut(10));
 
@@ -45,7 +51,7 @@ public class KlainsUniApp {
         personPanel.add(new JLabel("Surname:"));
         personPanel.add(surnameField);
 
-        personPanel.add(new JLabel("DOB:"));
+        personPanel.add(new JLabel("DOB (dd/mm/yyyy):"));
         personPanel.add(dobField);
 
         topPanel.add(personPanel);
@@ -65,7 +71,7 @@ public class KlainsUniApp {
         uniPanel.add(new JLabel("Course:"));
         uniPanel.add(courseField);
 
-        uniPanel.add(new JLabel("Start:"));
+        uniPanel.add(new JLabel("Start Date (dd/mm/yyyy):"));
         uniPanel.add(startDateField);
 
         topPanel.add(uniPanel);
@@ -76,6 +82,7 @@ public class KlainsUniApp {
         extraPanel.setBorder(BorderFactory.createTitledBorder("Hall Preferences"));
 
         String[] diets = {"standard", "vegan", "vegetarian"};
+
         JComboBox<String> dietBox = new JComboBox<>(diets);
         JCheckBox disabledBox = new JCheckBox("Disabled Student");
 
@@ -92,7 +99,6 @@ public class KlainsUniApp {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // --- Button row panel ---
         JPanel buttonRow = new JPanel();
         buttonRow.setLayout(new BoxLayout(buttonRow, BoxLayout.Y_AXIS));
 
@@ -102,6 +108,7 @@ public class KlainsUniApp {
         JButton loadBtn = new JButton("Load Student Details");
 
         Dimension buttonSize = new Dimension(160, 30);
+
         submitBtn.setPreferredSize(buttonSize);
         nextBtn.setPreferredSize(buttonSize);
         saveBtn.setPreferredSize(buttonSize);
@@ -109,23 +116,27 @@ public class KlainsUniApp {
 
         buttonRow.add(submitBtn);
         buttonRow.add(Box.createVerticalStrut(5));
+
         buttonRow.add(nextBtn);
         buttonRow.add(Box.createVerticalStrut(5));
+
         buttonRow.add(saveBtn);
         buttonRow.add(Box.createVerticalStrut(5));
+
         buttonRow.add(loadBtn);
 
-        // --- Search panel row ---
         JPanel searchPanel = new JPanel();
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search Student"));
+
         JTextField searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(180, 25));
+
         JButton searchBtn = new JButton("Search Surname");
+
         searchPanel.add(new JLabel("Surname:"));
         searchPanel.add(searchField);
         searchPanel.add(searchBtn);
 
-        // Add both panels to leftPanel
         leftPanel.add(buttonRow);
         leftPanel.add(Box.createVerticalStrut(15));
         leftPanel.add(searchPanel);
@@ -133,51 +144,208 @@ public class KlainsUniApp {
         frame.add(leftPanel, BorderLayout.WEST);
 
         // ================= BUTTON ACTIONS =================
+
         submitBtn.addActionListener(e -> {
+
+            // ================= EMPTY FIELD VALIDATION =================
+            if (givenNameField.getText().trim().isEmpty()
+                    || surnameField.getText().trim().isEmpty()
+                    || dobField.getText().trim().isEmpty()
+                    || studentIdField.getText().trim().isEmpty()
+                    || courseField.getText().trim().isEmpty()
+                    || startDateField.getText().trim().isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Please fill in all required fields.",
+                        "Validation Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+
+            // ================= NAME VALIDATION =================
+            String givenName = givenNameField.getText().trim();
+            String surname = surnameField.getText().trim();
+
+            if (!givenName.matches("[a-zA-Z ]+")
+                    || !surname.matches("[a-zA-Z ]+")) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Names must only contain letters.",
+                        "Validation Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+
+            // ================= DATE FORMAT VALIDATION =================
+            String dob = dobField.getText().trim();
+            String startDate = startDateField.getText().trim();
+
+            if (!dob.matches("\\d{2}/\\d{2}/\\d{4}")
+                    || !startDate.matches("\\d{2}/\\d{2}/\\d{4}")) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Dates must be in the format dd/mm/yyyy",
+                        "Validation Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+
+            // ================= REALISTIC DATE VALIDATION =================
             try {
+
+                DateTimeFormatter formatter =
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                LocalDate dobDate = LocalDate.parse(dob, formatter);
+                LocalDate courseStartDate =
+                        LocalDate.parse(startDate, formatter);
+
+                LocalDate today = LocalDate.now();
+
+                // DOB cannot be in future
+                if (dobDate.isAfter(today)) {
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Date of birth cannot be in the future.",
+                            "Validation Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+
+                    return;
+                }
+
+                // Max realistic human age = 122
+                int age = Period.between(dobDate, today).getYears();
+
+                if (age > 122) {
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Date of birth is unrealistic.",
+                            "Validation Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+
+                    return;
+                }
+
+                // Start year cannot be before 2027
+                if (courseStartDate.getYear() < 2027) {
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Course start year cannot be before 2027.",
+                            "Validation Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+
+                    return;
+                }
+
+            } catch (DateTimeParseException ex) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Invalid date entered.",
+                        "Validation Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+
+            try {
+
                 Student stuRes = new Student(
-                        givenNameField.getText(),
-                        surnameField.getText(),
-                        dobField.getText(),
+                        givenName,
+                        surname,
+                        dob,
                         studentIdField.getText(),
                         courseField.getText(),
-                        startDateField.getText()
+                        startDate
                 );
+
                 stuRes.setDiet((String) dietBox.getSelectedItem());
                 stuRes.setDisabled(disabledBox.isSelected());
+
                 store.assignHall(stuRes);
                 store.addPerson(stuRes);
+
                 displayStudents.setText(stuRes.toString());
+
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error creating student");
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Error creating student",
+                        "System Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         });
 
         nextBtn.addActionListener(e -> {
+
             Person p = store.getNextPerson();
-            if (p == null) JOptionPane.showMessageDialog(null, "No records available");
-            else displayStudents.setText(p.toString());
+
+            if (p == null) {
+                JOptionPane.showMessageDialog(null, "No records available");
+            } else {
+                displayStudents.setText(p.toString());
+            }
         });
 
         saveBtn.addActionListener(e -> {
+
             store.saveToFile("students.txt");
+
             JOptionPane.showMessageDialog(null, "Saved!");
         });
 
         loadBtn.addActionListener(e -> {
+
             store.loadFromFile("students.txt");
+
             JOptionPane.showMessageDialog(null, "Loaded!");
         });
 
         searchBtn.addActionListener(e -> {
+
             String query = searchField.getText().trim();
+
             if (query.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Enter a surname to search");
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Enter a surname to search"
+                );
+
                 return;
             }
+
             Person result = store.searchBySurname(query);
-            if (result == null) JOptionPane.showMessageDialog(null, "No student found");
-            else displayStudents.setText(result.toString());
+
+            if (result == null) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No student found"
+                );
+
+            } else {
+
+                displayStudents.setText(result.toString());
+            }
         });
 
         frame.setVisible(true);
