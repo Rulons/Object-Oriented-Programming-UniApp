@@ -25,7 +25,7 @@ The program provides a GUI for entering, storing, and navigating student data, a
 
 ## Requirements
 - Java Development Kit (JDK) 17
-- Visual Studio Code (or another Java IDE)
+- Neatbeans
 - Java Extension Pack installed in VS Code
 
 ---
