@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.klainsuniapp;
 
 public class Person {
-    protected String givenName;
-    protected String surname;
-    protected String dob;
+    private String givenName;
+    private String surname;
+    private String dob;
 
     public Person(String givenName, String surname, String dob) {
         this.givenName = givenName;
@@ -15,6 +11,7 @@ public class Person {
         this.dob = dob;
     }
 
+    // Getters
     public String getGivenName() {
         return givenName;
     }
@@ -27,6 +24,7 @@ public class Person {
         return dob;
     }
 
+    // Setters
     public void setGivenName(String givenName) {
         this.givenName = givenName;
     }

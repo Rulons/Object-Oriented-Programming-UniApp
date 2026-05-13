@@ -1,19 +1,36 @@
 package com.mycompany.klainsuniapp;
 
+/**
+ * The Main Student Class
+ * @author Klain
+ */
 public class Student extends Person {
+
     private String studentId;
     private String courseName;
     private String startDate;
 
+    private String diet;
+    private boolean disabled;
+    private String assignedHall;
+
+    private boolean paid;
+
     public Student(String givenName, String surname, String dob,
-                   String studentId, String courseName, String startDate) {
+            String studentId, String courseName, String startDate) {
+
         super(givenName, surname, dob);
+
         this.studentId = studentId;
         this.courseName = courseName;
         this.startDate = startDate;
+
+        this.diet = "standard";
+        this.disabled = false;
+        this.assignedHall = "Unassigned";
+        this.paid = false;
     }
 
-    // Getters
     public String getStudentId() {
         return studentId;
     }
@@ -26,35 +43,49 @@ public class Student extends Person {
         return startDate;
     }
 
-    // Setters
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public String getDiet() {
+        return diet;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public String getAssignedHall() {
+        return assignedHall;
     }
 
-    // Useful for displaying data (VERY important)
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setDiet(String diet) {
+        this.diet = diet;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public void setAssignedHall(String assignedHall) {
+        this.assignedHall = assignedHall;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
     @Override
     public String toString() {
-        return "Student Details:\n" +
-               "Name: " + givenName + " " + surname + "\n" +
-               "DOB: " + dob + "\n" +
-               "Student ID: " + studentId + "\n" +
-               "Course: " + courseName + "\n" +
-               "Start Date: " + startDate;
-    }
-
-    String getgName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    String getsName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "Student Details:\n"
+                + "Name: " + getGivenName() + " " + getSurname() + "\n"
+                + "DOB: " + getDob() + "\n"
+                + "ID: " + studentId + "\n"
+                + "Course: " + courseName + "\n"
+                + "Start Date: " + startDate + "\n"
+                + "Diet: " + diet + "\n"
+                + "Disabled: " + disabled + "\n"
+                + "Hall: " + assignedHall + "\n"
+                + "Paid: " + paid;
     }
 }
